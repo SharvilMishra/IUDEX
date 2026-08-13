@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "shideep"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }
