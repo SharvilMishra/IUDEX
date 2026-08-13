@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthorized() {
+      return request.auth != null &&
+        request.auth.token.email in [
+          'rajputmandeep931@gmail.com',
+          'dass27296@gmail.com'
+        ];
+    }
+
+    // Every collection: only the two whitelisted users may read or write.
+    // No public, no anonymous, no third-party access — ever.
+    match /{document=**} {
+      allow read, write: if isAuthorized();
+    }
+
+    // Extra guard: a user may only ever write their own uid-keyed profile doc.
+    match /users/{uid} {
+      allow write: if isAuthorized() && request.auth.uid == uid;
+    }
+  }
+}

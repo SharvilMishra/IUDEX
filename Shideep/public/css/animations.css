@@ -1,0 +1,60 @@
+/* ==========================================================================
+   PLISX — Animation System
+   Durations: 150ms (fast/micro), 250ms (base/transition), 350ms (slow/page)
+   ========================================================================== */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes skeleton-wave {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes disc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Utility animation classes ---- */
+.anim-fade-in   { animation: fade-in var(--dur-base) var(--ease-standard) both; }
+.anim-fade-up   { animation: fade-up var(--dur-slow) var(--ease-standard) both; }
+.anim-scale-in  { animation: scale-in var(--dur-base) var(--ease-standard) both; }
+.anim-slide-up  { animation: slide-up var(--dur-slow) var(--ease-standard) both; }
+
+/* Page transitions — applied by router.js to the outgoing/incoming view */
+.page-enter { animation: page-in var(--dur-slow) var(--ease-standard) both; }
+
+/* Stagger helper: set --stagger-index on children via JS for list reveals */
+.stagger-item {
+  animation: fade-up var(--dur-slow) var(--ease-standard) both;
+  animation-delay: calc(var(--stagger-index, 0) * 40ms);
+}
+
+/* Modal / toast entrance */
+.modal-backdrop { animation: fade-in var(--dur-fast) var(--ease-standard) both; }
+.modal { animation: slide-up var(--dur-base) var(--ease-standard) both; }
+.toast { animation: fade-up var(--dur-base) var(--ease-standard) both; }
