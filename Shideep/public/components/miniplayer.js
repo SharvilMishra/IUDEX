@@ -30,6 +30,35 @@ export function renderMiniPlayer(container) {
   const btn = document.getElementById("mini-player-btn");
   const icon = document.getElementById("mini-player-icon");
 
+  // Room state arrives on its own ticker (musicPlayer.js); route changes
+  // arrive via hashchange. Visibility depends on both, so both paths run
+  // through the same recompute rather than duplicating the render logic.
+  let lastRoom = null;
+  let lastPosition = 0;
+  let lastDuration = 0;
+
+  function isOnMusicPage() {
+    return window.location.hash.replace(/^#\/?/, "") === "music";
+  }
+
+  function update() {
+    // Full Music page already shows now-playing controls — showing the
+    // mini bar underneath it too was a duplicate, confusing UI.
+    const active = !!lastRoom?.videoId && !isOnMusicPage();
+    bar.hidden = !active;
+    document.body.classList.toggle("mini-player-active", active);
+    if (!active) return;
+
+    titleEl.textContent = lastRoom.title || "YouTube video";
+    thumbEl.style.backgroundImage = `url("${lastRoom.thumbnail || ""}")`;
+    icon.innerHTML = lastRoom.isPlaying
+      ? `<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>`
+      : `<path d="M8 5v14l11-7z"/>`;
+    btn.setAttribute("aria-label", lastRoom.isPlaying ? "Pause" : "Play");
+    const pct = lastDuration > 0 ? Math.min(100, (lastPosition / lastDuration) * 100) : 0;
+    fillEl.style.width = `${pct}%`;
+  }
+
   bar.addEventListener("click", (e) => {
     if (e.target.closest("#mini-player-btn")) return;
     navigate("music");
@@ -39,19 +68,12 @@ export function renderMiniPlayer(container) {
     togglePlayPause();
   });
 
-  subscribeMusicState(({ room, position, duration }) => {
-    const active = !!room?.videoId;
-    bar.hidden = !active;
-    document.body.classList.toggle("mini-player-active", active);
-    if (!active) return;
+  window.addEventListener("hashchange", update);
 
-    titleEl.textContent = room.title || "YouTube video";
-    thumbEl.style.backgroundImage = `url("${room.thumbnail || ""}")`;
-    icon.innerHTML = room.isPlaying
-      ? `<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>`
-      : `<path d="M8 5v14l11-7z"/>`;
-    btn.setAttribute("aria-label", room.isPlaying ? "Pause" : "Play");
-    const pct = duration > 0 ? Math.min(100, (position / duration) * 100) : 0;
-    fillEl.style.width = `${pct}%`;
+  subscribeMusicState(({ room, position, duration }) => {
+    lastRoom = room;
+    lastPosition = position;
+    lastDuration = duration;
+    update();
   });
 }

@@ -5,7 +5,7 @@
 // (a shell-level singleton) so it survives navigating to other pages —
 // this module is just the full-screen view + "add a song" flow.
 // ==========================================================================
-import { h, escapeHTML } from "../../js/utils.js";
+import { h, escapeHTML, truncate, attachSwipeToDismiss } from "../../js/utils.js";
 import { skeletonList } from "../../components/loader.js";
 import { openModal, closeModal } from "../../components/modal.js";
 import { showToast } from "../../components/toast.js";
@@ -109,6 +109,36 @@ export async function render(container) {
   let latestQueue = [];
   let lastRenderedQueueKey = "";
 
+  // Swipe-to-delete state — a swipe (or the ✕ button) plays a slide-out
+  // animation immediately, but the actual Firestore delete is delayed a
+  // few seconds behind an "Undo" toast, so a stray swipe isn't final.
+  const rowHandles = new Map(); // id -> { handle, rowEl }
+  const pendingRemovals = new Map(); // id -> setTimeout handle
+
+  function scheduleRemoval(item) {
+    if (pendingRemovals.has(item.id)) return;
+    const timer = setTimeout(async () => {
+      pendingRemovals.delete(item.id);
+      try {
+        await removeFromQueue(item.id);
+      } catch (err) {
+        reportError(err, "removing from queue");
+      }
+    }, 4000);
+    pendingRemovals.set(item.id, timer);
+
+    showToast(`Removed "${escapeHTML(truncate(item.title || "song", 28))}" from the queue`, "info", 4000, {
+      actionLabel: "Undo",
+      onAction: () => {
+        const t = pendingRemovals.get(item.id);
+        if (!t) return; // already committed, too late to undo
+        clearTimeout(t);
+        pendingRemovals.delete(item.id);
+        rowHandles.get(item.id)?.handle.restore();
+      }
+    });
+  }
+
   function setPlayIcon(isPlaying) {
     playIcon.innerHTML = isPlaying
       ? `<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>`
@@ -163,34 +193,49 @@ export async function render(container) {
           <p>The queue is empty. Paste a YouTube link to add the first song.</p>
         </div>`;
     } else {
+      rowHandles.clear();
       queueEl.innerHTML = items
         .map(
           (item, i) => `
-          <div class="card music-queue-item stagger-item" style="--stagger-index:${i};" data-id="${item.id}">
-            <div class="music-queue-thumb" style="background-image:url('${item.thumbnail || thumbnailFor(item.videoId)}')"></div>
-            <div class="music-queue-info">
-              <div class="music-queue-title">${escapeHTML(item.title || "YouTube video")}</div>
-              <div class="music-queue-author text-muted">${escapeHTML(item.author || "")}</div>
+          <div class="queue-swipe-row" style="--stagger-index:${i};" data-id="${item.id}">
+            <div class="queue-swipe-bg" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M9 3h6l1 2h4v2H4V5h4l1-2zm-2 6h2v9H7V9zm4 0h2v9h-2V9zm4 0h2v9h-2V9z"/></svg>
             </div>
-            <button class="btn btn--icon" data-action="play" aria-label="Play now" style="width:38px;height:38px;">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button class="btn btn--icon" data-action="remove" aria-label="Remove" style="width:38px;height:38px;">✕</button>
+            <div class="card music-queue-item swipe-target stagger-item">
+              <div class="music-queue-thumb" style="background-image:url('${item.thumbnail || thumbnailFor(item.videoId)}')"></div>
+              <div class="music-queue-info">
+                <div class="music-queue-title">${escapeHTML(item.title || "YouTube video")}</div>
+                <div class="music-queue-author text-muted">${escapeHTML(item.author || "")}</div>
+              </div>
+              <button class="btn btn--icon" data-action="play" aria-label="Play now" style="width:38px;height:38px;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <button class="btn btn--icon" data-action="remove" aria-label="Remove" style="width:38px;height:38px;">✕</button>
+            </div>
           </div>`
         )
         .join("");
 
-      queueEl.querySelectorAll("[data-action='play']").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.closest("[data-id]").dataset.id;
-          const item = latestQueue.find((q) => q.id === id);
-          if (item) playFromQueue(item).catch((err) => reportError(err, "playing queued song"));
+      queueEl.querySelectorAll(".queue-swipe-row").forEach((rowEl) => {
+        const id = rowEl.dataset.id;
+        const item = latestQueue.find((q) => q.id === id);
+        if (!item) return;
+
+        const targetEl = rowEl.querySelector(".swipe-target");
+        const bgEl = rowEl.querySelector(".queue-swipe-bg");
+        const handle = attachSwipeToDismiss(targetEl, bgEl, {
+          threshold: 88,
+          onCommit: () => scheduleRemoval(item)
         });
-      });
-      queueEl.querySelectorAll("[data-action='remove']").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.closest("[data-id]").dataset.id;
-          removeFromQueue(id).catch((err) => reportError(err, "removing from queue"));
+        rowHandles.set(id, { handle, rowEl });
+
+        targetEl.querySelector("[data-action='play']").addEventListener("click", () => {
+          playFromQueue(item).catch((err) => reportError(err, "playing queued song"));
+        });
+        // Same slide-out + undo flow as a completed swipe — tapping ✕
+        // is never an instant, unrecoverable delete.
+        targetEl.querySelector("[data-action='remove']").addEventListener("click", () => {
+          handle.commit();
         });
       });
     }

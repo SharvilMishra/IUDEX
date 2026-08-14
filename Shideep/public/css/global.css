@@ -71,6 +71,10 @@
   /* ---- Layout ---- */
   --nav-height: 72px;
   --max-width: 720px;
+
+  /* ---- Safe areas (notches / gesture bars — Android & iOS) ---- */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---- Reset ---- */
@@ -155,7 +159,7 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
-  padding-bottom: calc(var(--nav-height) + var(--space-6));
+  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-6));
 }
 
 .page {

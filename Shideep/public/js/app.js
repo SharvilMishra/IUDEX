@@ -10,6 +10,8 @@ import { renderMiniPlayer } from "../components/miniplayer.js";
 import { initMusicPlayer } from "./musicPlayer.js";
 import { renderCallOverlay } from "../components/callOverlay.js";
 import { initCallManager } from "./callManager.js";
+import { renderPresenceBadge } from "../components/presenceBadge.js";
+import { initPresence, setPresenceRoute } from "./presence.js";
 import "./installPrompt.js"; // side effect: registers beforeinstallprompt listener as early as possible
 import { loaderScreen } from "../components/loader.js";
 import { reportError } from "./ui.js";
@@ -97,10 +99,17 @@ function renderShell() {
   const setActive = renderNavbar(appEl, "home", (route) => navigate(route));
   renderMiniPlayer(appEl);
   renderCallOverlay(appEl);
+  renderPresenceBadge(appEl);
   initMusicPlayer("yt-player-target");
   initCallManager("remote-call-audio");
+  initPresence();
 
-  initRouter(outlet, { onChange: setActive });
+  initRouter(outlet, {
+    onChange: (route) => {
+      setActive(route);
+      setPresenceRoute(route);
+    }
+  });
   renderCurrentRoute();
   navbarWired = true;
 }
