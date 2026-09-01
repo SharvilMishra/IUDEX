@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Settings (SET-001..005)
+// IUDEX — Settings (SET-001..005)
 // Profile info, partner's last-seen, install-to-home-screen, and sign out.
 // ==========================================================================
 import { h, escapeHTML, timeAgo } from "../../js/utils.js";
@@ -93,13 +93,13 @@ export async function render(container) {
     installEl.hidden = false;
     installEl.innerHTML = `
       <div class="card">
-        <div class="eyebrow" style="margin-bottom:8px;">Install Shideep</div>
+        <div class="eyebrow" style="margin-bottom:8px;">Install IUDEX</div>
         <p class="text-muted" style="margin-bottom:12px;">Add it to your home screen for the full app-like experience — no browser bar, opens instantly.</p>
         <button class="btn btn--primary" id="install-btn" style="width:100%;">Install app</button>
       </div>`;
     document.getElementById("install-btn").addEventListener("click", async () => {
       const accepted = await promptInstall();
-      if (accepted) showToast("Installed! Look for Shideep on your home screen.", "success");
+      if (accepted) showToast("Installed! Look for IUDEX on your home screen.", "success");
     });
   }
   renderInstallCard(isInstallAvailable());

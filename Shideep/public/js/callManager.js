@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Call Manager (shell singleton)
+// IUDEX — Call Manager (shell singleton)
 // Owns the RTCPeerConnection and microphone stream for the lifetime of the
 // session, same pattern as musicPlayer.js — so a call survives navigating
 // to another page. The full-screen overlay (components/callOverlay.js)

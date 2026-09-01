@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Home / Dashboard (DASH-001..008)
+// IUDEX — Home / Dashboard (DASH-001..008)
 // ==========================================================================
 import { h, formatDate, timeAgo, pickRandom, todayKey, escapeHTML } from "../../js/utils.js";
 import { card } from "../../components/card.js";

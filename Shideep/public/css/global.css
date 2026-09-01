@@ -6,19 +6,19 @@
 
 :root {
   /* ---- Color: surfaces ---- */
-  --bg: #0F172A;
-  --card: #1E293B;
-  --card-elevated: #243149;
+  --bg: #060B14;
+  --card: #0E1826;
+  --card-elevated: #16243A;
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
 
   /* ---- Color: accents ---- */
-  --accent-primary: #8B5CF6;
-  --accent-primary-dim: rgba(139, 92, 246, 0.16);
-  --accent-secondary: #3B82F6;
-  --accent-secondary-dim: rgba(59, 130, 246, 0.16);
-  --accent-highlight: #EC4899;
-  --accent-highlight-dim: rgba(236, 72, 153, 0.16);
+  --accent-primary: #2563EB;
+  --accent-primary-dim: rgba(37, 99, 235, 0.16);
+  --accent-secondary: #0EA5E9;
+  --accent-secondary-dim: rgba(14, 165, 233, 0.16);
+  --accent-highlight: #38BDF8;
+  --accent-highlight-dim: rgba(56, 189, 248, 0.16);
 
   /* ---- Color: text ---- */
   --text-primary: #F8FAFC;

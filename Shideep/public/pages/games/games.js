@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Games Hub (GAME-001..006 common requirements)
+// IUDEX — Games Hub (GAME-001..006 common requirements)
 // Acts as a lightweight internal router within the /games route: picking a
 // game swaps the view in place (no hash change).
 // ==========================================================================

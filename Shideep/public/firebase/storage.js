@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Storage Service
+// IUDEX — Storage Service
 //
 // ⚠️ CURRENTLY UNUSED. Firebase Storage requires the pay-as-you-go "Blaze"
 // plan, which the project is intentionally avoiding for now. Gallery, Chat,

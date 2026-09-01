@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Music Player (shell singleton)
+// IUDEX — Music Player (shell singleton)
 // Unlike every other feature module, this is NOT owned by a page. It's
 // initialized once when the app shell mounts and lives for the entire
 // session, so switching to Chat/Games/etc. — or locking the screen — never
@@ -87,8 +87,8 @@ function updateMediaSession() {
   }
   navigator.mediaSession.metadata = new MediaMetadata({
     title: room.title || "YouTube video",
-    artist: room.author || "Shideep",
-    album: "Shideep",
+    artist: room.author || "IUDEX",
+    album: "IUDEX",
     artwork: [
       { src: room.thumbnail || thumbnailFor(room.videoId), sizes: "480x360", type: "image/jpeg" }
     ]

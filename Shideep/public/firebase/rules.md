@@ -1,4 +1,4 @@
-# Shideep Security Rules
+# IUDEX Security Rules
 
 These enforce SEC requirements from the PRD/SAD server-side — the client-side
 `AUTHORIZED_EMAILS` check in `auth.js` is UX only and can't be trusted alone.
@@ -23,8 +23,8 @@ service cloud.firestore {
     function isAuthorized() {
       return request.auth != null &&
         request.auth.token.email in [
-          'rajputmandeep931@gmail.com',
-          'dass27296@gmail.com'
+          'user1@example.com',
+          'user2@example.com'
         ];
     }
 
@@ -57,8 +57,8 @@ service firebase.storage {
     function isAuthorized() {
       return request.auth != null &&
         request.auth.token.email in [
-          'rajputmandeep931@gmail.com',
-          'dass27296@gmail.com'
+          'user1@example.com',
+          'user2@example.com'
         ];
     }
 

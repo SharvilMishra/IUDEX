@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Connect Four (GAME-001..006)
+// IUDEX — Connect Four (GAME-001..006)
 // Board stored flat, 42 cells, row-major, 7 columns x 6 rows.
 // index = row * 7 + col ; row 0 = top, row 5 = bottom.
 // ==========================================================================

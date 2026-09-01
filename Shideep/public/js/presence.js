@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Presence
+// IUDEX — Presence
 // "Is my person around, and what are they doing?" Built on the existing
 // users/{uid} profile doc (auth.js already seeds name/email/photoURL there)
 // by adding a `presence` map. Firestore has no reliable disconnect signal

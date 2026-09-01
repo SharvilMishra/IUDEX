@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Auth Service (Firebase layer)
+// IUDEX — Auth Service (Firebase layer)
 // Implements AUTH-001..006 from the FSD.
 // ==========================================================================
 

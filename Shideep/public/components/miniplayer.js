@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Persistent Mini Player
+// IUDEX — Persistent Mini Player
 // Lives in the app shell (mounted once, alongside the navbar), not inside
 // any page's outlet — so it keeps showing/controlling playback no matter
 // which page you're on. Tapping the bar itself opens the full Music page;

@@ -1,12 +1,12 @@
 {
-  "name": "Shideep",
-  "short_name": "Shideep",
+  "name": "IUDEX",
+  "short_name": "IUDEX",
   "description": "A private digital home for two.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0F172A",
-  "theme_color": "#0F172A",
+  "background_color": "#060B14",
+  "theme_color": "#060B14",
   "orientation": "portrait",
   "icons": [
     { "src": "/assets/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

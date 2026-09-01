@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Firebase Configuration
+// IUDEX — Firebase Configuration
 // ==========================================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -23,6 +23,6 @@ export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export const AUTHORIZED_EMAILS = [
-  "rajputmandeep931@gmail.com",
-  "dass27296@gmail.com"
+  "user1@example.com",
+  "user2@example.com"
 ];

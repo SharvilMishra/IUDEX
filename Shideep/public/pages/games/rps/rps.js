@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Rock Paper Scissors (GAME-001..006)
+// IUDEX — Rock Paper Scissors (GAME-001..006)
 // Both players pick privately; once both have chosen, the round reveals
 // and a winner is computed. Running score persists across rounds until
 // "New Game" resets it.

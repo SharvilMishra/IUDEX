@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — App Entry Point
+// IUDEX — App Entry Point
 // Auth flow per TAD §6: Sign-In -> Firebase Auth -> Check Email -> Allowed?
 //   Yes -> Load Dashboard      No -> Access Denied
 // ==========================================================================
@@ -52,7 +52,7 @@ function renderSignIn() {
   appEl.appendChild(
     h(`
       <div class="access-denied">
-        <h1 style="font-size:2rem;">Shideep</h1>
+        <h1 style="font-size:2rem;">IUDEX</h1>
         <p style="max-width:280px;">A private space for two. Sign in with your Google account to continue.</p>
         <button class="btn btn--primary" id="google-signin" style="margin-top:16px;">Continue with Google</button>
       </div>
@@ -78,7 +78,7 @@ function renderAccessDenied() {
     h(`
       <div class="access-denied">
         <h1 style="font-size:1.75rem;">Access denied</h1>
-        <p style="max-width:280px;">This account isn't part of Shideep. Only two people are allowed in here.</p>
+        <p style="max-width:280px;">This account isn't part of IUDEX. Only two people are allowed in here.</p>
         <button class="btn btn--ghost" id="signout-btn" style="margin-top:16px;">Sign out</button>
       </div>
     `)

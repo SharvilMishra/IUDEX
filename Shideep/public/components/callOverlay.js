@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Call Overlay
+// IUDEX — Call Overlay
 // Shell-level, like the mini-player — mounted once in app.js, not inside
 // any page's outlet, so an incoming or active call is visible no matter
 // where you are in the app.

@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Music Sync
+// IUDEX — Music Sync
 // Shared Firestore plumbing for the synced listening room (MUS-001..005).
 // One singleton "room" doc holds what's currently playing + its timestamp;
 // a "musicQueue" collection holds what's up next. Reuses gameSync's role

@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Install Prompt (PWA "Add to Home Screen")
+// IUDEX — Install Prompt (PWA "Add to Home Screen")
 // Registered at shell boot (imported once from app.js) so the browser's
 // beforeinstallprompt event is never missed, regardless of which page the
 // user happens to be on when it fires. Settings reads from this module

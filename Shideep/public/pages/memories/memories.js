@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Memories (MEM-001..007)
+// IUDEX — Memories (MEM-001..007)
 // ==========================================================================
 import { h, escapeHTML, formatDate, debounce } from "../../js/utils.js";
 import { skeletonList } from "../../components/loader.js";

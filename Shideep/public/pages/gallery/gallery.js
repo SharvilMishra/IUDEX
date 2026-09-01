@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Shared Gallery (GAL-001..008)
+// IUDEX — Shared Gallery (GAL-001..008)
 // Images are added by pasting a URL rather than uploading a file, so the
 // project can run entirely on Firebase's free Spark plan (no Storage).
 // ==========================================================================
@@ -210,7 +210,7 @@ function openViewer(photo) {
   });
 
   function handleDelete(p) {
-    confirmDialog("This photo will be removed for both of you. (The original stays wherever you linked it from — this only removes it from Shideep.)", {
+    confirmDialog("This photo will be removed for both of you. (The original stays wherever you linked it from — this only removes it from IUDEX.)", {
       onConfirm: async () => {
         try {
           await deleteDocById("gallery", p.id);

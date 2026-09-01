@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Router
+// IUDEX — Router
 // Hash-based SPA routing (TAD §5). Unknown routes redirect to Home.
 // Each page module exports: { render(container, ctx) -> teardown fn|void }
 // Router calls the previous page's teardown before mounting the next page,

@@ -1,6 +1,6 @@
 // ==========================================================================
-// Shideep — Call Sync
-// Firestore-based WebRTC signaling. Since Shideep only ever has two users,
+// IUDEX — Call Sync
+// Firestore-based WebRTC signaling. Since IUDEX only ever has two users,
 // one shared "room" doc is enough — no need for arbitrary call IDs. The
 // doc holds the offer/answer SDP plus each side's trickled ICE candidates
 // as arrays (appended via arrayUnion so concurrent writes never clobber

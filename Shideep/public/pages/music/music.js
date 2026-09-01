@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Music (MUS-001..006)
+// IUDEX — Music (MUS-001..006)
 // A synced listening room: paste a YouTube link, it plays at the same
 // timestamp on both devices. Playback itself is owned by js/musicPlayer.js
 // (a shell-level singleton) so it survives navigating to other pages —

@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Partner Presence Badge
+// IUDEX — Partner Presence Badge
 // Shell-level, like the mini-player and call overlay: mounted once so it
 // floats above every page, showing whether your person is online right
 // now and what they're doing.

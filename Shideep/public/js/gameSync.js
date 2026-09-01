@@ -1,7 +1,7 @@
 // ==========================================================================
-// Shideep — Game Sync
+// IUDEX — Game Sync
 // Shared Firestore plumbing for every multiplayer game (TAD Games Module).
-// Since Shideep only ever has exactly two users, player roles are assigned
+// Since IUDEX only ever has exactly two users, player roles are assigned
 // deterministically from the fixed email whitelist — no join/invite flow
 // needed (GAME-002 is satisfied implicitly: both users are always "in").
 // ==========================================================================

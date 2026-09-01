@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Bucket List (BKT-001..005)
+// IUDEX — Bucket List (BKT-001..005)
 // ==========================================================================
 import { h, escapeHTML } from "../../js/utils.js";
 import { skeletonList } from "../../components/loader.js";

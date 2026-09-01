@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Service Worker
+// IUDEX — Service Worker
 // Caches the app shell so previously visited pages work offline (PRD §12).
 // Bump CACHE_NAME whenever shell files change to force a refresh.
 // ==========================================================================

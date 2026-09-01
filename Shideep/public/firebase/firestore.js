@@ -1,5 +1,5 @@
 // ==========================================================================
-// Shideep — Firestore Service
+// IUDEX — Firestore Service
 // Thin, generic wrappers so feature modules (chat.js, gallery.js, ...)
 // never touch the Firebase SDK directly. Keeps query patterns consistent
 // and makes security-rule debugging easier (one place logs writes).

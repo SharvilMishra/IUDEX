@@ -1,8 +1,8 @@
 // ==========================================================================
-// Shideep — Mood & Journal (MOOD-001..005)
+// IUDEX — Mood & Journal (MOOD-001..005)
 // One check-in per person per day (doc id = date_uid, upsertable). The
 // history feed below doubles as the "journal" — both people's notes,
-// newest first, shared like everything else in Shideep.
+// newest first, shared like everything else in IUDEX.
 // ==========================================================================
 import { h, escapeHTML, timeAgo, todayKey } from "../../js/utils.js";
 import { card } from "../../components/card.js";
