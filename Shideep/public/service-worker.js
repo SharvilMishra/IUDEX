@@ -4,7 +4,7 @@
 // Bump CACHE_NAME whenever shell files change to force a refresh.
 // ==========================================================================
 
-const CACHE_NAME = "shideep-shell-v1.0.1";
+const CACHE_NAME = "iudex-shell-v1.0.02";
 const SHELL_FILES = [
   "/",
   "/index.html",

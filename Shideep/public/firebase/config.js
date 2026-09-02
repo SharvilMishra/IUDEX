@@ -23,6 +23,6 @@ export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 
 export const AUTHORIZED_EMAILS = [
-  "user1@example.com",
+  "sharvilm112@gmail.com",
   "user2@example.com"
 ];
