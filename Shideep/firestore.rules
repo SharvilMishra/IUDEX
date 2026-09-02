@@ -6,8 +6,8 @@ service cloud.firestore {
     function isAuthorized() {
       return request.auth != null &&
         request.auth.token.email in [
-          'rajputmandeep931@gmail.com',
-          'dass27296@gmail.com'
+          'user1@gmail.com',
+          'user2@gmail.com'
         ];
     }
 
