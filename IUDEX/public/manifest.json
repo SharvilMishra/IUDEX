@@ -1,0 +1,19 @@
+{
+  "name": "IUDEX",
+  "short_name": "IUDEX",
+  "description": "A username-based real-time messaging application. Find people by their @username and start a private conversation.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#060B14",
+  "theme_color": "#060B14",
+  "orientation": "portrait",
+  "categories": ["social", "communication"],
+  "icons": [
+    { "src": "/assets/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/icons/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
