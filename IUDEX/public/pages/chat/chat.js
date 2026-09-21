@@ -367,6 +367,21 @@ export async function render(container, ctx = {}) {
   });
 
   /* ---- live data ---- */
+  // The conversation doc changes on every typing ping, lastMessage preview,
+  // and participantInfo refresh — not just when read receipts update. Fully
+  // re-rendering the message list on all of those was the cause of a visible
+  // blink while the other person was typing (a full innerHTML rebuild every
+  // ~400ms). Read status is the only thing bubbles in that list actually
+  // depend on, so only rebuild them when the readAt map has genuinely
+  // changed value, not merely been re-touched.
+  let lastReadSignature = null;
+  function readSignature(doc) {
+    return Object.entries(doc?.readAt || {})
+      .map(([uid, ts]) => `${uid}:${ts?.toMillis ? ts.toMillis() : ts}`)
+      .sort()
+      .join(",");
+  }
+
   const unsubConversation = subscribeConversation(
     convId,
     async (doc) => {
@@ -382,7 +397,12 @@ export async function render(container, ctx = {}) {
       }
       paintHeader();
       paintRequestBar();
-      paintMessages(); // read receipts live on the conversation doc
+
+      const signature = readSignature(doc);
+      if (signature !== lastReadSignature) {
+        lastReadSignature = signature;
+        paintMessages(); // read receipts live on the conversation doc
+      }
     },
     (err) => {
       if (err?.code === "permission-denied") {
