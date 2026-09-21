@@ -20,7 +20,8 @@ import { getUserById, isOnline } from "../../services/users.js";
 import {
   subscribeConversation, subscribeMessages, sendMessage, reactToMessage,
   deleteMessage, setTyping, markRead, isPeerTyping, isMessageRead,
-  peerUidOf, TYPING_TIMEOUT_MS
+  peerUidOf, TYPING_TIMEOUT_MS, isPending, isDeclined, isRequester,
+  acceptRequest, declineRequest
 } from "../../services/conversations.js";
 
 const QUICK_REACTIONS = ["❤️", "😂", "👍", "😮", "😢", "🔥"];
@@ -57,8 +58,9 @@ export async function render(container, ctx = {}) {
       <div id="message-list" class="message-list" aria-live="polite"></div>
 
       <div id="reply-preview"></div>
+      <div id="request-bar"></div>
 
-      <div class="composer">
+      <div class="composer" id="composer">
         <button class="btn btn--icon" id="chat-image-btn" aria-label="Send a photo link">🔗</button>
         <input id="chat-input" type="text" placeholder="Message…" autocomplete="off"
                aria-label="Message" maxlength="2000">
@@ -99,6 +101,70 @@ export async function render(container, ctx = {}) {
     } else {
       peerSubEl.textContent = `@${peer.username || ""}`;
       peerSubEl.className = "chat-peer-sub";
+    }
+  }
+
+  /* ---- message request state ---- */
+  const requestBarEl = qs("#request-bar");
+  const composerEl = qs("#composer");
+  let decidingRequest = false;
+
+  function paintRequestBar() {
+    if (!conversation) return;
+
+    if (isDeclined(conversation)) {
+      requestBarEl.innerHTML = `
+        <div class="request-bar request-bar--declined">
+          This request was declined. You can still read the messages above.
+        </div>`;
+      composerEl.hidden = true;
+      return;
+    }
+
+    if (!isPending(conversation)) {
+      requestBarEl.innerHTML = "";
+      composerEl.hidden = false;
+      return;
+    }
+
+    if (isRequester(conversation)) {
+      // I sent this request — let me keep typing while it's pending, just
+      // say so, rather than blocking me the way it blocks the recipient.
+      requestBarEl.innerHTML = `
+        <div class="request-bar request-bar--waiting">
+          Waiting for @${escapeHTML(peer?.username || "")} to accept your request.
+        </div>`;
+      composerEl.hidden = false;
+      return;
+    }
+
+    // I'm the recipient — this is the actual approval gate.
+    requestBarEl.innerHTML = `
+      <div class="request-bar request-bar--decide">
+        <span>@${escapeHTML(peer?.username || "")} wants to message you.</span>
+        <span class="request-bar-actions">
+          <button class="btn btn--ghost btn--sm" id="chat-decline">Decline</button>
+          <button class="btn btn--primary btn--sm" id="chat-accept">Accept</button>
+        </span>
+      </div>`;
+    composerEl.hidden = true;
+
+    qs("#chat-accept").addEventListener("click", () => decideRequest(acceptRequest, "Request accepted."));
+    qs("#chat-decline").addEventListener("click", () => decideRequest(declineRequest, "Request declined."));
+  }
+
+  async function decideRequest(action, successMessage) {
+    if (decidingRequest) return;
+    decidingRequest = true;
+    try {
+      await action(convId);
+      showToast(successMessage, "success");
+      // paintRequestBar() re-runs automatically off the live conversation
+      // subscription once Firestore confirms the write.
+    } catch (err) {
+      reportError(err, "responding to request");
+    } finally {
+      decidingRequest = false;
     }
   }
 
@@ -315,6 +381,7 @@ export async function render(container, ctx = {}) {
         }
       }
       paintHeader();
+      paintRequestBar();
       paintMessages(); // read receipts live on the conversation doc
     },
     (err) => {

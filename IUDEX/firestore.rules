@@ -72,16 +72,62 @@ service cloud.firestore {
 
       allow list: if isParticipant();
 
+      // The other person in a brand-new conversation, computed from the
+      // create payload rather than from an existing document (there isn't
+      // one yet).
+      function otherOf(participants) {
+        return participants[0] == request.auth.uid ? participants[1] : participants[0];
+      }
+
+      // Re-derives the same "is the recipient private" answer the client
+      // used to decide pending-vs-active, straight from their stored
+      // profile. This is what actually enforces private accounts: without
+      // it, any client could write status:"active" directly and the
+      // approval step would be UI theater rather than a real gate.
+      function targetIsPrivate() {
+        let other = otherOf(request.resource.data.participants);
+        // exists() first, same reasoning as inParentConversation() below:
+        // get() on a missing document throws rather than denying cleanly.
+        return exists(/databases/$(database)/documents/users/$(other))
+               && get(/databases/$(database)/documents/users/$(other)).data.get('private', false) == true;
+      }
+
       // A new conversation must include its creator, have exactly two
-      // participants, and carry no messages in its initial payload.
+      // participants, carry no messages in its initial payload, and open
+      // in the correct state for the recipient's privacy setting: pending
+      // (attributed to its actual creator) against a private account,
+      // active against a public one.
       allow create: if signedIn()
                     && request.auth.uid in request.resource.data.participants
-                    && request.resource.data.participants.size() == 2;
+                    && request.resource.data.participants.size() == 2
+                    && (
+                         targetIsPrivate()
+                           ? (request.resource.data.status == 'pending'
+                              && request.resource.data.requestedBy == request.auth.uid)
+                           : request.resource.data.status == 'active'
+                       );
+
+      // Status only ever moves pending -> active or pending -> declined,
+      // and only the *other* participant may do it - the requester can't
+      // approve their own request. Every other field (typing, readAt,
+      // lastMessage, participantInfo, ...) is an "ordinary" update and
+      // passes through unconditionally, same as before this feature
+      // existed.
+      function isOrdinaryUpdate() {
+        return request.resource.data.status == resource.data.status;
+      }
+      function isRequestDecision() {
+        return resource.data.status == 'pending'
+               && resource.data.requestedBy != request.auth.uid
+               && (request.resource.data.status == 'active'
+                   || request.resource.data.status == 'declined');
+      }
 
       // The participant list is fixed for the life of the thread - letting
       // it change would silently add a third reader to an existing chat.
       allow update: if isParticipant()
-                    && request.resource.data.participants == resource.data.participants;
+                    && request.resource.data.participants == resource.data.participants
+                    && (isOrdinaryUpdate() || isRequestDecision());
 
       allow delete: if false;
 

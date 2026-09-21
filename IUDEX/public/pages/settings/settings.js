@@ -11,7 +11,7 @@ import { reportError } from "../../js/ui.js";
 import { navigate } from "../../js/router.js";
 import { auth } from "../../firebase/config.js";
 import { logout } from "../../firebase/auth.js";
-import { getUserById } from "../../services/users.js";
+import { getUserById, setPrivateAccount, isPrivateAccount } from "../../services/users.js";
 import {
   isInstallAvailable, onInstallAvailabilityChange, promptInstall, isRunningStandalone
 } from "../../js/installPrompt.js";
@@ -48,6 +48,18 @@ export async function render(container) {
         <span>${user?.emailVerified ? "Yes" : "No"}</span>
       </div>
 
+      <h3 class="settings-heading">Privacy</h3>
+      <div class="card settings-row settings-row--toggle">
+        <span class="settings-toggle-text">
+          <span>Private account</span>
+          <span class="field-hint">New messages need your approval before the chat opens.</span>
+        </span>
+        <button type="button" class="toggle" id="privacy-toggle"
+                role="switch" aria-checked="false" aria-label="Private account">
+          <span class="toggle-thumb"></span>
+        </button>
+      </div>
+
       <h3 class="settings-heading">App</h3>
       <div id="install-card" hidden></div>
       <div class="card settings-row">
@@ -59,8 +71,16 @@ export async function render(container) {
     </div>
   `));
 
-  /* ---- account card ---- */
+  /* ---- account card + privacy toggle ---- */
   const accountEl = qs("#settings-account");
+  const privacyToggle = qs("#privacy-toggle");
+  let togglingPrivacy = false;
+
+  function paintToggle(isPrivate) {
+    privacyToggle.classList.toggle("toggle--on", isPrivate);
+    privacyToggle.setAttribute("aria-checked", String(isPrivate));
+  }
+
   try {
     const profile = await getUserById(user.uid);
     accountEl.innerHTML = `
@@ -73,10 +93,33 @@ export async function render(container) {
         <span class="user-row-chevron" aria-hidden="true">›</span>
       </button>`;
     qs("#settings-profile").addEventListener("click", () => navigate("me"));
+
+    paintToggle(isPrivateAccount(profile));
   } catch (err) {
     reportError(err, "loading your account");
     accountEl.innerHTML = "";
   }
+
+  privacyToggle.addEventListener("click", async () => {
+    if (togglingPrivacy) return;
+    togglingPrivacy = true;
+
+    const next = !privacyToggle.classList.contains("toggle--on");
+    paintToggle(next); // optimistic — flip back on failure below
+
+    try {
+      await setPrivateAccount(next);
+      showToast(
+        next ? "Your account is now private." : "Your account is now public.",
+        "success"
+      );
+    } catch (err) {
+      paintToggle(!next);
+      reportError(err, "updating privacy setting");
+    } finally {
+      togglingPrivacy = false;
+    }
+  });
 
   /* ---- install ---- */
   const installEl = qs("#install-card");

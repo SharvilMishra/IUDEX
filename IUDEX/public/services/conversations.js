@@ -78,6 +78,14 @@ export async function openConversationWith(otherUser) {
   const myProfile = await getDocById("users", me.uid);
 
   if (!existing) {
+    // Whether this opens as a live chat or a pending request depends on
+    // the *recipient's* privacy setting, never the sender's — messaging a
+    // private account is what needs approval, not being messaged by one.
+    // The client decision here is only for UX; firestore.rules independently
+    // re-derives the same check from the recipient's stored profile, so a
+    // tampered client can't just write "active" and skip the gate.
+    const targetIsPrivate = !!otherUser.private;
+
     await setDocById(
       "conversations",
       convId,
@@ -88,6 +96,8 @@ export async function openConversationWith(otherUser) {
           [otherUser.uid]: publicInfo(otherUser)
         },
         lastMessage: null,
+        status: targetIsPrivate ? "pending" : "active",
+        requestedBy: targetIsPrivate ? me.uid : null,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       },
@@ -95,6 +105,8 @@ export async function openConversationWith(otherUser) {
     );
   } else {
     // Refresh the cached copies — either side may have renamed themselves.
+    // Status is untouched: reopening an existing thread never resets a
+    // decision that was already made.
     await updateDocById("conversations", convId, {
       [`participantInfo.${me.uid}`]: publicInfo(myProfile || {}),
       [`participantInfo.${otherUser.uid}`]: publicInfo(otherUser)
@@ -102,6 +114,43 @@ export async function openConversationWith(otherUser) {
   }
 
   return convId;
+}
+
+/* ---- Message requests -----------------------------------------------------
+   A conversation with no `status` field is legacy data from before this
+   feature existed — treated as "active" everywhere below, so nothing needs
+   a migration.
+   ------------------------------------------------------------------------- */
+
+export function isPending(conversation) {
+  return conversation?.status === "pending";
+}
+
+export function isDeclined(conversation) {
+  return conversation?.status === "declined";
+}
+
+/** True if *I* am the one who sent this request (not the one deciding it). */
+export function isRequester(conversation) {
+  return !!conversation?.requestedBy && conversation.requestedBy === auth.currentUser?.uid;
+}
+
+/** True if this is a pending request sitting in my queue to accept/decline. */
+export function isAwaitingMyResponse(conversation) {
+  return isPending(conversation) && !isRequester(conversation);
+}
+
+export async function acceptRequest(convId) {
+  await updateDocById("conversations", convId, { status: "active", updatedAt: serverTimestamp() });
+}
+
+export async function declineRequest(convId) {
+  // Declined rather than deleted: Firestore doesn't cascade-delete a
+  // document's subcollection, so removing the conversation doc would orphan
+  // its messages rather than clean them up. A status flag keeps the whole
+  // thread (and its rules) coherent, and gives the sender an honest answer
+  // instead of the request silently vanishing.
+  await updateDocById("conversations", convId, { status: "declined", updatedAt: serverTimestamp() });
 }
 
 /**
@@ -212,7 +261,11 @@ export function isMessageRead(conversation, message, peerUid) {
 /** Unread count for the chat list — approximate, based on readAt vs lastMessage. */
 export function hasUnread(conversation) {
   const uid = auth.currentUser?.uid;
-  if (!uid || !conversation?.lastMessage) return false;
+  if (!uid) return false;
+  // A request awaiting my decision is "unread" in spirit even before any
+  // message has landed — it's something of mine that needs attention.
+  if (isAwaitingMyResponse(conversation)) return true;
+  if (!conversation?.lastMessage) return false;
   if (conversation.lastMessage.senderId === uid) return false;
 
   const readAt = conversation.readAt?.[uid];

@@ -12,17 +12,35 @@ import { openModal, closeModal } from "../../components/modal.js";
 import { reportError } from "../../js/ui.js";
 import { navigate, back } from "../../js/router.js";
 import { auth } from "../../firebase/config.js";
+import { getDocById } from "../../firebase/firestore.js";
 import { findUserByUsername } from "../../services/usernames.js";
-import { getUserById, updateMyProfile, isOnline } from "../../services/users.js";
-import { openConversationWith } from "../../services/conversations.js";
+import { getUserById, updateMyProfile, isOnline, isPrivateAccount } from "../../services/users.js";
+import {
+  openConversationWith, conversationId, isPending, isRequester, isDeclined
+} from "../../services/conversations.js";
 
-function profileHTML(user, { isMe }) {
+/** Message button label + whether it should be disabled, from the existing conversation (if any). */
+function messageButtonState(existingConv) {
+  if (!existingConv) return { label: "Message", disabled: false };
+  if (isDeclined(existingConv)) return { label: "View conversation", disabled: false };
+  if (isPending(existingConv)) {
+    return isRequester(existingConv)
+      ? { label: "Request sent", disabled: false }
+      : { label: "Respond to request", disabled: false };
+  }
+  return { label: "Message", disabled: false };
+}
+
+function profileHTML(user, { isMe, existingConv }) {
   const online = isOnline(user);
+  const { label: messageLabel } = messageButtonState(existingConv);
+
   return `
     <div class="profile-head">
       ${avatarHTML(user, 96, { online })}
       <h1 class="profile-name">${escapeHTML(user.name || user.username)}</h1>
       <p class="profile-handle">@${escapeHTML(user.username)}</p>
+      ${isPrivateAccount(user) ? `<p class="private-badge">🔒 Private account</p>` : ""}
       <p class="profile-status">${
         online
           ? `<span class="status-dot status-dot--online"></span> Online now`
@@ -35,7 +53,7 @@ function profileHTML(user, { isMe }) {
       <div class="profile-actions">
         ${isMe
           ? `<button class="btn btn--primary" id="profile-edit">Edit profile</button>`
-          : `<button class="btn btn--primary" id="profile-message">Message</button>`}
+          : `<button class="btn btn--primary" id="profile-message">${escapeHTML(messageLabel)}</button>`}
       </div>
 
       ${user.joinedAt ? `<p class="profile-joined">Joined ${escapeHTML(timeAgo(user.joinedAt))}</p>` : ""}
@@ -89,8 +107,25 @@ export async function render(container, ctx = {}) {
     return () => { alive = false; };
   }
 
+  // Whether we already have a thread with this person, and what state it's
+  // in, decides the Message button's label (see messageButtonState above).
+  let existingConv = null;
+  if (!isMe) {
+    try {
+      existingConv = await getDocById(
+        "conversations",
+        conversationId(auth.currentUser.uid, user.uid)
+      );
+    } catch (err) {
+      // A denied read means no conversation exists yet — the button just
+      // falls back to "Message", same convention used throughout
+      // services/conversations.js.
+      if (err?.code !== "permission-denied") reportError(err, "checking conversation status");
+    }
+  }
+
   function paint() {
-    bodyEl.innerHTML = profileHTML(user, { isMe });
+    bodyEl.innerHTML = profileHTML(user, { isMe, existingConv });
     wire();
   }
 

@@ -863,6 +863,12 @@
   color: var(--text-muted);
 }
 
+/* .composer already sets display:flex as an author rule, which otherwise
+   overrides the browser's default [hidden]{display:none} at equal
+   specificity — author beats user-agent regardless of order. This makes
+   the hidden attribute actually take effect while pending as recipient. */
+.composer[hidden] { display: none; }
+
 .composer {
   display: flex;
   align-items: center;
@@ -915,3 +921,104 @@
 .settings-account-name { font-weight: 700; }
 .settings-account-handle { font-size: var(--text-sm); color: var(--accent-highlight); }
 .settings-signout { width: 100%; margin-top: var(--space-8); }
+
+/* ==========================================================================
+   IUDEX — Private accounts & message requests
+   ========================================================================== */
+
+/* Settings toggle switch */
+.settings-row--toggle { align-items: center; }
+.settings-toggle-text { display: flex; flex-direction: column; gap: 2px; }
+.toggle {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border);
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.toggle--on {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-color: transparent;
+}
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.toggle--on .toggle-thumb { transform: translateX(18px); }
+
+/* Discover / profile */
+.private-badge {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Chats list — requests section */
+.requests-section {
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.requests-eyebrow { margin-bottom: var(--space-2); }
+
+.request-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+}
+.request-row:hover { background: rgba(255, 255, 255, 0.03); }
+.request-row-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+.request-row-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.btn--sm { padding: var(--space-2) var(--space-4); font-size: var(--text-xs); }
+
+.pending-tag {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--accent-highlight);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--accent-highlight);
+}
+
+/* Conversation thread — request bar states */
+.request-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  border-top: 1px solid var(--border);
+}
+.request-bar--waiting,
+.request-bar--declined {
+  color: var(--text-muted);
+  justify-content: center;
+  text-align: center;
+}
+.request-bar--decide { background: var(--card); }
+.request-bar-actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
