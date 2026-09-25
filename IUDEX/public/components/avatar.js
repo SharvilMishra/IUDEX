@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Avatar
+// e-CON — Avatar
 // Photo when there is one, coloured initial when there isn't.
 //
 // The fallback colour is derived from the username rather than picked at

@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Claim your @username
+// e-CON — Claim your @username
 //
 // Shown once, between sign-in and the app, for any account without a
 // username. It's a hard gate rather than a skippable prompt: in a
@@ -50,10 +50,10 @@ export function renderUsernameScreen(appEl, { user, profile }) {
       <div class="auth-card glass anim-fade-up">
 
         <header class="auth-header">
-          <div class="auth-logo" aria-hidden="true">IX</div>
+          <div class="auth-logo" aria-hidden="true">eC</div>
           <h1 class="auth-wordmark">Pick your @username</h1>
           <p class="auth-tagline">
-            ${firstName ? `Nice to meet you, ${escapeHTML(firstName)}. ` : ""}This is how people find and message you on IUDEX.
+            ${firstName ? `Nice to meet you, ${escapeHTML(firstName)}. ` : ""}This is how people find and message you on e-CON.
           </p>
         </header>
 

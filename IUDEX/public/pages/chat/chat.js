@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Conversation
+// e-CON — Conversation
 //
 // Renders one thread: conversations/{convId}/messages. Two live listeners —
 // one on the conversation doc (peer info, typing, read state) and one on the

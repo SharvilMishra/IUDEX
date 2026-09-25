@@ -1,6 +1,6 @@
 // ==========================================================================
-// IUDEX — Discover
-// Browse everyone on IUDEX, or jump straight to an exact @username.
+// e-CON — Discover
+// Browse everyone on e-CON, or jump straight to an exact @username.
 // ==========================================================================
 import { h, escapeHTML, debounce } from "../../js/utils.js";
 import { skeletonList } from "../../components/loader.js";
@@ -39,7 +39,7 @@ export async function render(container) {
         </div>
       </div>
 
-      <div class="eyebrow" id="discover-label" style="margin:22px 0 12px;">People on IUDEX</div>
+      <div class="eyebrow" id="discover-label" style="margin:22px 0 12px;">People on e-CON</div>
       <div id="discover-results">${skeletonList(5, "height:64px; margin-bottom:10px;")}</div>
     </div>
   `));
@@ -64,7 +64,7 @@ export async function render(container) {
   }
 
   async function loadDirectory() {
-    labelEl.textContent = "People on IUDEX";
+    labelEl.textContent = "People on e-CON";
     try {
       const users = await listUsers();
       paint(users, "No one else has joined yet. You're early.");

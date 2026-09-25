@@ -1,11 +1,11 @@
 // ==========================================================================
-// IUDEX — Auth Service
+// e-CON — Auth Service
 //
 // Two providers, one account model:
 //   • Email + password  (Firebase "Email/Password" provider)
 //   • Google            (Firebase "Google" provider)
 //
-// There is no whitelist. Anyone can create an IUDEX account. What gates
+// There is no whitelist. Anyone can create an e-CON account. What gates
 // entry to the app is *not* identity but onboarding state: a signed-in
 // account without a claimed @username has no usable presence in a
 // username-based messenger, so it is routed to the username step instead
@@ -50,7 +50,7 @@ async function seedProfile(user, { displayName } = {}) {
     {
       uid: user.uid,
       // Prefer what's already stored — the user may have edited their
-      // display name in IUDEX after signing up with Google.
+      // display name in e-CON after signing up with Google.
       name: existing?.name || displayName || user.displayName || "",
       email: user.email || "",
       photoURL: existing?.photoURL || user.photoURL || "",

@@ -1,9 +1,9 @@
 // ==========================================================================
-// IUDEX — Firebase Configuration
+// e-CON — Firebase Configuration
 // Single source of truth for the Firebase SDK handles used app-wide.
 //
 // NOTE: there is deliberately no authorized-email list here any more.
-// IUDEX is a public, username-based messenger — anyone may create an
+// e-CON is a public, username-based messenger — anyone may create an
 // account. Access control lives entirely in firestore.rules, scoped by
 // `request.auth.uid`, which is the only place it can actually be enforced.
 // ==========================================================================

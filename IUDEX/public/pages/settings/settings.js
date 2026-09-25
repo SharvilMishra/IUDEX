@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Settings
+// e-CON — Settings
 // Account summary, install-to-home-screen, and sign out.
 // ==========================================================================
 import { h, escapeHTML, qs } from "../../js/utils.js";
@@ -64,7 +64,7 @@ export async function render(container) {
       <div id="install-card" hidden></div>
       <div class="card settings-row">
         <span class="text-muted">Version</span>
-        <span>IUDEX 1.0</span>
+        <span>e-CON 1.0</span>
       </div>
 
       <button class="btn btn--danger settings-signout" id="logout-btn">Sign out</button>
@@ -131,13 +131,13 @@ export async function render(container) {
     installEl.hidden = false;
     installEl.innerHTML = `
       <div class="card">
-        <div class="eyebrow" style="margin-bottom:8px;">Install IUDEX</div>
+        <div class="eyebrow" style="margin-bottom:8px;">Install e-CON</div>
         <p class="text-muted" style="margin-bottom:12px;">Add it to your home screen — no browser bar, opens instantly.</p>
         <button class="btn btn--primary" id="install-btn" style="width:100%;">Install app</button>
       </div>`;
     qs("#install-btn").addEventListener("click", async () => {
       const accepted = await promptInstall();
-      if (accepted) showToast("Installed! Look for IUDEX on your home screen.", "success");
+      if (accepted) showToast("Installed! Look for e-CON on your home screen.", "success");
     });
   }
   renderInstallCard(isInstallAvailable());

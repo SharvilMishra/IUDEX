@@ -1,18 +1,21 @@
 // ==========================================================================
-// IUDEX — Local storage helpers
+// e-CON — Local storage helpers
 //
-// All keys are namespaced `iudex_*`. The app previously shipped as SHIDEEP,
-// so anything still under a `shideep_*` key is migrated on boot rather than
-// dropped — an existing install must not lose its settings just because the
-// product was renamed.
+// All keys are namespaced `econ_*`. The product has been renamed twice —
+// SHIDEEP -> IUDEX -> e-CON — so a real install could still be sitting on
+// either older prefix. Both migrate forward on boot rather than getting
+// dropped; an existing user must not lose their settings just because the
+// product was renamed again.
 //
 // Every access is wrapped: localStorage throws outright in Safari private
 // mode and when a browser blocks third-party storage, and none of what we
 // keep here is important enough to break the app over.
 // ==========================================================================
 
-const PREFIX = "iudex_";
-const LEGACY_PREFIX = "shideep_";
+const PREFIX = "econ_";
+// Oldest first: a key still on the original prefix should end up at the
+// current one in a single pass, not require running the app twice.
+const LEGACY_PREFIXES = ["shideep_", "iudex_"];
 
 function safeGet(key) {
   try { return window.localStorage.getItem(key); } catch { return null; }
@@ -38,10 +41,10 @@ export function removeStored(name) {
 }
 
 /**
- * Copy any `shideep_*` key to its `iudex_*` equivalent, then remove the old
- * one — but only once the copy has been verified by reading it back. An
- * unwritable storage (quota, private mode) would otherwise delete the
- * original and leave nothing behind.
+ * Copy any key under a legacy prefix to its `econ_*` equivalent, then
+ * remove the old one — but only once the copy has been verified by reading
+ * it back. An unwritable storage (quota, private mode) would otherwise
+ * delete the original and leave nothing behind.
  *
  * Safe to call on every boot: it's a no-op once there's nothing left to move.
  */
@@ -63,9 +66,10 @@ export function migrateLegacyKeys() {
 
   let migrated = 0;
   for (const oldKey of keys) {
-    if (!oldKey.startsWith(LEGACY_PREFIX)) continue;
+    const prefix = LEGACY_PREFIXES.find((p) => oldKey.startsWith(p));
+    if (!prefix) continue;
 
-    const newKey = PREFIX + oldKey.slice(LEGACY_PREFIX.length);
+    const newKey = PREFIX + oldKey.slice(prefix.length);
     const value = safeGet(oldKey);
     if (value === null) continue;
 
@@ -78,6 +82,6 @@ export function migrateLegacyKeys() {
     migrated += 1;
   }
 
-  if (migrated) console.info(`[IUDEX] migrated ${migrated} legacy storage key(s).`);
+  if (migrated) console.info(`[e-CON] migrated ${migrated} legacy storage key(s).`);
   return migrated;
 }

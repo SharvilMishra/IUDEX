@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Username Service
+// e-CON — Username Service
 //
 // A username is the app's primary identity: it's what people search for,
 // what appears on profiles, and what a conversation is started from. So it
@@ -24,7 +24,7 @@ const USERNAME_PATTERN = /^[a-z][a-z0-9_]*$/;
 // Names that would be confusing, impersonating, or that we may want for
 // routes/system messages later. Cheap to reserve now, painful to reclaim.
 const RESERVED = new Set([
-  "iudex", "admin", "administrator", "root", "system", "support", "help",
+  "econ", "admin", "administrator", "root", "system", "support", "help",
   "about", "settings", "profile", "me", "home", "chat", "chats", "discover",
   "search", "login", "logout", "signin", "signup", "register", "api",
   "official", "staff", "team", "moderator", "mod", "null", "undefined"

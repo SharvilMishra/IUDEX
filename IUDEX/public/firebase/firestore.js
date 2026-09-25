@@ -1,11 +1,11 @@
 // ==========================================================================
-// IUDEX — Firestore Service
+// e-CON — Firestore Service
 // Thin, generic wrappers so feature modules (chat.js, discover.js, ...)
 // never touch the Firebase SDK directly.
 //
 // Every `path` argument accepts a slash-separated Firestore path, so the
 // same helpers work for top-level collections ("users") and for nested
-// subcollections ("conversations/<id>/messages"). That matters here: IUDEX
+// subcollections ("conversations/<id>/messages"). That matters here: e-CON
 // stores each conversation's messages underneath the conversation itself,
 // which is what makes per-conversation security rules expressible at all.
 // ==========================================================================

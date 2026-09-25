@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Utilities
+// e-CON — Utilities
 // ==========================================================================
 
 /** Minimal query shorthand */
@@ -16,7 +16,7 @@ export function h(html) {
 /**
  * Escape user-provided text before inserting it into innerHTML.
  *
- * This matters more in IUDEX than it did in the two-user build: display
+ * This matters more in e-CON than it did in the two-user build: display
  * names, bios and messages now come from strangers, so every one of them is
  * hostile input until proven otherwise.
  */

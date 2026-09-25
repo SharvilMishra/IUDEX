@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Chats (home)
+// e-CON — Chats (home)
 // Live list of your conversations, most recent first — plus any pending
 // message requests waiting on your decision, shown separately above them.
 // ==========================================================================

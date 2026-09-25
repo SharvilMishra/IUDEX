@@ -1,9 +1,9 @@
 rules_version = '2';
 
 // ==========================================================================
-// IUDEX - Firestore Security Rules
+// e-CON - Firestore Security Rules
 //
-// IUDEX is a public, username-based messenger: anyone may create an account,
+// e-CON is a public, username-based messenger: anyone may create an account,
 // so there is no email whitelist here any more. Access is scoped by uid.
 //
 // The model in one line: profiles and usernames are publicly readable to

@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — App Entry Point
+// e-CON — App Entry Point
 //
 // Boot sequence:
 //   loading  ->  watchAuthState  ->  one of:
@@ -8,14 +8,14 @@
 //     ready           -> app shell + router
 //
 // The shell is built exactly once per session and torn down on sign-out, so
-// the navbar and presence heartbeat aren't rewired on every auth callback.
+// the app bar/drawer and presence heartbeat aren't rewired on every auth callback.
 // ==========================================================================
 
 import { watchAuthState, completeRedirectSignIn } from "../firebase/auth.js";
 import { registerRoute, initRouter, navigate, renderCurrentRoute } from "./router.js";
 import { renderAuthScreen } from "./authScreen.js";
 import { renderUsernameScreen } from "./usernameScreen.js";
-import { renderNavbar } from "../components/navbar.js";
+import { renderAppBar } from "../components/appbar.js";
 import { initPresence, stopPresence, setPresenceRoute } from "./presence.js";
 import { migrateLegacyKeys } from "./storage.js";
 import { loaderScreen } from "../components/loader.js";
@@ -34,6 +34,8 @@ registerRoute("u", () => import("../pages/profile/profile.js"));
 registerRoute("me", () => import("../pages/profile/profile.js"));
 registerRoute("chat", () => import("../pages/chat/chat.js"));
 registerRoute("settings", () => import("../pages/settings/settings.js"));
+registerRoute("groupchats", () => import("../pages/groupchats/groupchats.js"));
+registerRoute("community", () => import("../pages/community/community.js"));
 
 let shellMounted = false;
 let setActiveNav = null;
@@ -57,7 +59,7 @@ function renderShell() {
   appEl.innerHTML = `<main id="outlet"></main>`;
   const outlet = document.getElementById("outlet");
 
-  setActiveNav = renderNavbar(appEl, (route) => navigate(route));
+  setActiveNav = renderAppBar(appEl, (route) => navigate(route));
 
   initRouter(outlet, {
     onChange: (route) => {

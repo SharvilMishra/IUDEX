@@ -1,4 +1,4 @@
-# IUDEX
+# e-CON
 
 **A username-based real-time messaging web application.**
 
@@ -19,7 +19,7 @@ Sign up / Google  →  Choose unique @username  →  Chats
 
 ## What changed from the previous build
 
-This repo used to be **SHIDEEP**, a private two-person app. It is now IUDEX,
+This repo used to be **SHIDEEP**, a private two-person app. It is now e-CON,
 and the change is architectural, not cosmetic:
 
 | Before | Now |
@@ -43,7 +43,7 @@ it's parked in **`_archive/legacy-two-user/`**, which sits outside the
 migration compatibility points, both commented as such:
 
 - `js/storage.js` — migrates any leftover `shideep_*` localStorage key to its
-  `iudex_*` equivalent
+  `econ_*` equivalent
 - `service-worker.js` — its activate handler deletes old `shideep-shell-*`
   caches
 
@@ -77,7 +77,7 @@ in `config.js` needed changing beyond removing the whitelist.
    ```
 
 `public/firebase/config.js` already holds this project's config. Replace it if
-you point IUDEX at a different Firebase project.
+you point e-CON at a different Firebase project.
 
 > Firebase web API keys are not secrets — they identify the project, they
 > don't authorize anything. `firestore.rules` is what actually protects data.

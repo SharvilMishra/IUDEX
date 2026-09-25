@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX - Service Worker
+// e-CON - Service Worker
 //
 // Caches the app shell so previously visited screens still open offline.
 // Bump CACHE_NAME whenever a shell file changes, or browsers will keep
@@ -13,7 +13,7 @@
 // js/storage.js instead.
 // ==========================================================================
 
-const CACHE_NAME = "iudex-shell-v2.0.0";
+const CACHE_NAME = "econ-shell-v3.0.0";
 
 const SHELL_FILES = [
   "/",
@@ -31,7 +31,9 @@ const SHELL_FILES = [
   "/js/usernameScreen.js",
   "/js/presence.js",
   "/js/installPrompt.js",
-  "/components/navbar.js",
+  "/components/appbar.js",
+  "/components/navdrawer.js",
+  "/js/navConfig.js",
   "/components/avatar.js",
   "/components/modal.js",
   "/components/toast.js",
@@ -46,7 +48,7 @@ self.addEventListener("install", (event) => {
       Promise.all(
         SHELL_FILES.map((file) =>
           cache.add(file).catch((err) =>
-            console.warn("[IUDEX sw] could not cache", file, err)
+            console.warn("[e-CON sw] could not cache", file, err)
           )
         )
       )

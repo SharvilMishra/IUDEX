@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Presence
+// e-CON — Presence
 //
 // Writes a heartbeat to users/{uid}.presence while the tab is visible.
 // Reading side (services/users.js -> isOnline) treats a stale heartbeat as

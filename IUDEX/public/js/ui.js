@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — UI Helpers
+// e-CON — UI Helpers
 // One place to turn raw Firebase/JS errors into copy a person can act on,
 // so no internal implementation detail ever reaches the screen.
 // ==========================================================================
@@ -8,7 +8,7 @@ import { showToast } from "../components/toast.js";
 const FRIENDLY = {
   // Firestore
   "permission-denied": "You don't have permission to do that.",
-  "unavailable": "IUDEX can't reach the server right now. Check your connection.",
+  "unavailable": "e-CON can't reach the server right now. Check your connection.",
   "failed-precondition": "A required database index is still building. Try again shortly.",
   "not-found": "That's no longer there.",
   "resource-exhausted": "Too many requests. Give it a moment.",
@@ -33,6 +33,6 @@ export function friendlyError(err) {
 
 /** Toast the friendly copy; log the raw error for whoever is debugging. */
 export function reportError(err, context = "") {
-  console.error(`[IUDEX]${context ? ` ${context}:` : ""}`, err);
+  console.error(`[e-CON]${context ? ` ${context}:` : ""}`, err);
   showToast(friendlyError(err), "error");
 }

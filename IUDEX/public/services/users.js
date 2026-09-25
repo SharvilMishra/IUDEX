@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — User Directory Service
+// e-CON — User Directory Service
 // Discovery and search over the public `users` collection.
 // ==========================================================================
 

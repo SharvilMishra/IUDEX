@@ -1,6 +1,6 @@
-# IUDEX — Security Rules
+# e-CON — Security Rules
 
-IUDEX is a **public, username-based messenger**. Anyone may create an account,
+e-CON is a **public, username-based messenger**. Anyone may create an account,
 so there is no longer an email whitelist anywhere — not in `auth.js`, not in
 `config.js`, and not here. Access is scoped entirely by `request.auth.uid`.
 

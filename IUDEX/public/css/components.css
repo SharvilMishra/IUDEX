@@ -1,5 +1,5 @@
 /* ==========================================================================
-   IUDEX — Component Library
+   e-CON — Component Library
    ========================================================================== */
 
 /* ---- Glass card (base surface for the whole app) ---- */
@@ -112,58 +112,139 @@
   border-color: var(--accent-secondary);
 }
 
-/* ---- Bottom navigation ---- */
-.navbar {
+/* ==========================================================================
+   e-CON — App bar + navigation drawer
+
+   Replaces the old fixed-4-tab bottom bar. Destinations are config-driven
+   (js/navConfig.js) rather than hardcoded per component, and the drawer
+   scales to any number of sections by scrolling — the bar itself never gets
+   more crowded as sections are added, which a bottom tab row eventually
+   would.
+   ========================================================================== */
+.app-bar {
   position: fixed;
-  bottom: 0;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
   max-width: var(--max-width);
-  height: calc(var(--nav-height) + var(--safe-bottom));
+  height: calc(var(--app-bar-height) + var(--safe-top));
+  padding-top: var(--safe-top);
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  background: color-mix(in srgb, var(--card) 80%, transparent);
+  gap: var(--space-3);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
-  border-top: 1px solid var(--border);
-  padding: 0 var(--space-2);
-  padding-bottom: var(--safe-bottom);
+  border-bottom: 1px solid var(--border);
   z-index: 40;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.navbar::-webkit-scrollbar { display: none; }
 
-.nav-item {
+.app-bar-menu-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+}
+.app-bar-menu-btn:hover { background: rgba(255, 255, 255, 0.06); color: var(--text-primary); }
+.app-bar-menu-btn svg { width: 22px; height: 22px; }
+
+.app-bar-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Drawer ---- */
+.nav-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 16, 0.55);
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-standard);
+}
+.nav-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--drawer-width);
+  background: var(--card-elevated);
+  border-right: 1px solid var(--border-strong);
+  z-index: 91;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  min-width: 56px;
-  padding: var(--space-2);
-  color: var(--text-muted);
-  font-size: var(--text-xs);
-  transition: color var(--dur-fast) var(--ease-standard);
-  border-radius: var(--radius-md);
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  transform: translateX(-100%);
+  transition: transform var(--dur-base) var(--ease-standard);
+  overflow-y: auto;
 }
-.nav-item svg { width: 22px; height: 22px; }
-.nav-item.active { color: var(--accent-primary); }
-.nav-item:hover { color: var(--text-primary); }
+.nav-drawer.open { transform: translateX(0); }
 
-/* ---- Top app bar ---- */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 30;
+.nav-drawer-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-5);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-2);
+}
+.nav-drawer-logo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-sm);
+  color: #fff;
+}
+.nav-drawer-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-base);
+  letter-spacing: 0.06em;
+}
+
+.nav-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-5);
+  color: var(--text-secondary);
+  border-left: 3px solid transparent;
+  transition: background var(--dur-fast) var(--ease-standard),
+              color var(--dur-fast) var(--ease-standard);
+}
+.nav-drawer-item svg { width: 21px; height: 21px; flex-shrink: 0; }
+.nav-drawer-item:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); }
+.nav-drawer-item.active {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--accent-secondary);
+  font-weight: 600;
 }
 
 /* ---- Modal / Dialog ---- */
@@ -265,7 +346,7 @@
 
 
 /* ==========================================================================
-   IUDEX — Avatars
+   e-CON — Avatars
    ========================================================================== */
 .avatar-wrap {
   position: relative;
@@ -315,7 +396,7 @@
 .status-dot--online { background: var(--success); }
 
 /* ==========================================================================
-   IUDEX — Auth & onboarding screens
+   e-CON — Auth & onboarding screens
    ========================================================================== */
 .auth-screen {
   min-height: 100vh;
@@ -568,7 +649,7 @@
 }
 
 /* ==========================================================================
-   IUDEX — Page scaffolding
+   e-CON — Page scaffolding
    ========================================================================== */
 .page-head {
   display: flex;
@@ -596,7 +677,7 @@
 .search-field { margin-bottom: var(--space-2); }
 
 /* ==========================================================================
-   IUDEX — Chat list & user rows
+   e-CON — Chat list & user rows
    ========================================================================== */
 .chat-list { display: flex; flex-direction: column; gap: var(--space-2); }
 
@@ -692,7 +773,7 @@
 }
 
 /* ==========================================================================
-   IUDEX — Profile
+   e-CON — Profile
    ========================================================================== */
 .profile-head {
   display: flex;
@@ -723,12 +804,14 @@
 }
 
 /* ==========================================================================
-   IUDEX — Conversation
+   e-CON — Conversation
    ========================================================================== */
 .chat-page {
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - var(--nav-height) - var(--safe-bottom) - var(--space-6));
+  /* #app's padding-top already reserves space for the fixed app bar;
+     this just fills whatever's left of the viewport below it. */
+  height: calc(100dvh - var(--app-bar-height) - var(--safe-top));
 }
 
 .chat-header {
@@ -874,6 +957,9 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
+  /* With no bottom bar reserving space any more, the composer sits at the
+     literal bottom of the viewport — keep it clear of a phone's gesture bar. */
+  padding-bottom: calc(var(--space-3) + var(--safe-bottom));
   border-top: 1px solid var(--border);
   background: var(--bg);
 }
@@ -889,7 +975,7 @@
 .composer input:focus { border-color: var(--accent-secondary); }
 
 /* ==========================================================================
-   IUDEX — Settings
+   e-CON — Settings
    ========================================================================== */
 .settings-heading {
   margin: var(--space-6) 0 var(--space-3);
@@ -923,7 +1009,7 @@
 .settings-signout { width: 100%; margin-top: var(--space-8); }
 
 /* ==========================================================================
-   IUDEX — Private accounts & message requests
+   e-CON — Private accounts & message requests
    ========================================================================== */
 
 /* Settings toggle switch */

@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Sign In / Create Account
+// e-CON — Sign In / Create Account
 //
 // One screen, two modes (sign in / create account) and two providers
 // (email+password, Google). Google is placed above the email form because
@@ -68,8 +68,8 @@ export function renderAuthScreen(appEl) {
       <div class="auth-card glass anim-fade-up">
 
         <header class="auth-header">
-          <div class="auth-logo" aria-hidden="true">IX</div>
-          <h1 class="auth-wordmark">IUDEX</h1>
+          <div class="auth-logo" aria-hidden="true">eC</div>
+          <h1 class="auth-wordmark">e-CON</h1>
           <p class="auth-tagline">Message anyone by @username.</p>
         </header>
 
@@ -119,7 +119,7 @@ export function renderAuthScreen(appEl) {
         </form>
 
         <p class="auth-switch">
-          <span id="auth-switch-text">New to IUDEX?</span>
+          <span id="auth-switch-text">New to e-CON?</span>
           <button type="button" class="auth-link" id="auth-switch-btn">Create an account</button>
         </p>
 
@@ -186,7 +186,7 @@ export function renderAuthScreen(appEl) {
     googleLabel.textContent = isSignup ? "Sign up with Google" : "Continue with Google";
     forgotBtn.hidden = isSignup;
 
-    switchText.textContent = isSignup ? "Already have an account?" : "New to IUDEX?";
+    switchText.textContent = isSignup ? "Already have an account?" : "New to e-CON?";
     switchBtn.textContent = isSignup ? "Sign in" : "Create an account";
   }
 

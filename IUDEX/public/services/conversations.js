@@ -1,8 +1,8 @@
 // ==========================================================================
-// IUDEX — Conversation Service
+// e-CON — Conversation Service
 //
 // The old build had one global `messages` collection, which only worked
-// because exactly two people could ever sign in. IUDEX is open, so
+// because exactly two people could ever sign in. e-CON is open, so
 // messages are scoped to a conversation between two specific uids.
 //
 // Conversation ids are deterministic: the two uids sorted and joined with

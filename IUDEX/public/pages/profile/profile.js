@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Profile
+// e-CON — Profile
 // Serves two routes from one module:
 //   #/u/<username>  — someone else's profile, with "Message"
 //   #/me            — your own, with inline editing
@@ -65,7 +65,7 @@ function notFoundHTML(username) {
     <div class="empty-state" style="min-height:50vh;">
       <div style="font-size:34px;">🫥</div>
       <h3 style="margin-bottom:6px;">No such user</h3>
-      <p style="max-width:300px;">Nobody on IUDEX goes by @${escapeHTML(username || "")}.</p>
+      <p style="max-width:300px;">Nobody on e-CON goes by @${escapeHTML(username || "")}.</p>
       <button class="btn btn--ghost" id="profile-back" style="margin-top:18px;">Back to Discover</button>
     </div>`;
 }

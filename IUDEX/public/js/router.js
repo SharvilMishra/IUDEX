@@ -1,5 +1,5 @@
 // ==========================================================================
-// IUDEX — Router
+// e-CON — Router
 // Hash routing with a single optional parameter: #/route/param
 //   #/chats                     -> { route: "chats" }
 //   #/u/sharvil                 -> { route: "u", param: "sharvil" }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   IUDEX — Global Design Tokens
+   e-CON — Global Design Tokens
    Palette, type scale, spacing, and base resets.
    Every color/spacing value in the app should trace back to a token here.
    ========================================================================== */
@@ -69,7 +69,8 @@
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ---- Layout ---- */
-  --nav-height: 72px;
+  --app-bar-height: 58px;
+  --drawer-width: min(300px, 85vw);
   --max-width: 720px;
 
   /* ---- Safe areas (notches / gesture bars — Android & iOS) ---- */
@@ -159,12 +160,14 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
-  padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--space-6));
+  /* The app bar is fixed/sticky at the top now instead of a bottom tab bar,
+     so the shell reserves space up top and no longer needs a bottom gap. */
+  padding-top: calc(var(--app-bar-height) + var(--safe-top));
 }
 
-/* Sign-in and username onboarding render without the navbar, so the space
-   reserved for it would otherwise leave a dead gap under a centred card. */
-#app.app--no-nav { padding-bottom: 0; }
+/* Sign-in and username onboarding render without the app bar, so the space
+   reserved for it would otherwise leave a dead gap above a centred card. */
+#app.app--no-nav { padding-top: 0; }
 
 .page {
   padding: var(--space-6) var(--space-5) var(--space-4);
